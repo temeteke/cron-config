@@ -11,7 +11,9 @@ cmd="$*"
 msg=$(eval $cmd 2>&1)
 code=$?
 
-[ ! -z "$check" ] && [ "$code" -eq 0 ] && exit
-[   -z "$msg" ] && exit
+[ ! -z "$check" ] && [ "$code" -eq 0 ] && exit $code
+[   -z "$msg" ] && exit $code
 [   -z "$mail" ] && echo "$msg"
 [ ! -z "$mail" ] && echo "$msg" | mail -s "$cmd" "$mail"
+
+exit $code
