@@ -8,7 +8,7 @@ done
 shift $(expr $OPTIND - 1)
 
 cmd="$*"
-msg=$(eval $cmd 2>&1)
+msg=$(eval $cmd 2>&1 | sed '/\r/d')
 code=$?
 
 [ ! -z "$check" ] && [ "$code" -eq 0 ] && exit $code
