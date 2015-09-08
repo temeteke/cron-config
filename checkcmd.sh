@@ -7,8 +7,8 @@ while getopts "cm:" opt; do
 done
 shift $(expr $OPTIND - 1)
 
-cmd="$*"
-msg=$(eval $cmd 2>&1)
+cmd=$*
+msg=$(eval "$cmd" 2>&1)
 code=$?
 msg=$(echo "$msg" | sed '/\r/d')
 
