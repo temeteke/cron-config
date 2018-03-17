@@ -1,20 +1,18 @@
 #!/bin/sh
-while getopts "cm:" opt; do
+while getopts "m:" opt; do
 	case $opt in
-		c) check=1;;
-		m) mail=$OPTARG;;
+		m) mail_address=$OPTARG;;
 	esac
 done
 shift $(expr $OPTIND - 1)
 
 cmd=$*
-msg=$(eval "$cmd" 2>&1)
-code=$?
-msg=$(echo "$msg" | sed '/\r/d')
+message=$(eval "$cmd" 2>&1)
+exit_status=$?
 
-[ ! -z "$check" ] && [ "$code" -eq 0 ] && exit $code
-[   -z "$msg" ] && exit $code
-[   -z "$mail" ] && echo "$msg"
-[ ! -z "$mail" ] && echo "$msg" | mail -s "$cmd" "$mail"
+[ "$exit_status" -eq 0 ] && exit
 
-exit $code
+[ -z "$mail_address" ] && echo "$message"
+[ -n "$mail_address" ] && echo "$message" | mail -s "$cmd" "$mail_address"
+
+exit $exit_status
