@@ -12,7 +12,7 @@ exit_status=$?
 
 [ "$exit_status" -eq 0 ] && exit
 
-[ -z "$mail_address" ] && echo "$message"
-[ -n "$mail_address" ] && echo "$message" | mail -s "$cmd" "$mail_address"
+[ -z "$mail_address" ] && echo -n "$message"
+[ -n "$mail_address" ] && echo -n "$message" | mail -s "$cmd" "$mail_address"
 
 exit $exit_status
