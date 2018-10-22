@@ -8,4 +8,8 @@ file=$(echo "$cmd" | md5sum | awk '{print $1}')
 
 eval "$cmd" > /tmp/$file
 [ -f $file ] && diff $file /tmp/$file
+status=$?
+
 mv /tmp/$file $file
+
+exit $status
