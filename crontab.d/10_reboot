@@ -1,1 +1,1 @@
-@reboot echo "$(hostname) has been booted up at $(date -Iseconds)"
+@reboot echo "$HOSTNAME has been booted up at $(date -Iseconds)"
