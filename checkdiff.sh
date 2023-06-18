@@ -6,7 +6,7 @@ mkdir -p $DIR && cd $DIR
 cmd=$*
 file=$(echo "$cmd" | md5sum | awk '{print $1}')
 
-eval "$cmd" > /tmp/$file
+eval "$cmd" > /tmp/$file 2>&1
 [ -f $file ] || touch $file
 diff $file /tmp/$file
 status=$?
