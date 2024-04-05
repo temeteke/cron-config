@@ -1,10 +1,13 @@
 BINDIR=~/bin
 
-.PHONY: all clean install uninstall
+.PHONY: all clean install uninstall FORCE
 all: crontab
 
 crontab: $(sort $(wildcard crontab.d/*)) $(sort $(wildcard ~/.crontab.d/*))
 	cat $+ > $@
+
+crontab.d/mail: FORCE
+	echo MAILFROM=$(USER) > $@
 
 clean:
 	rm -f crontab
@@ -20,3 +23,5 @@ uninstall:
 	rm $(BINDIR)/checkdiff.sh
 	rm $(BINDIR)/filter_lines.sh
 	crontab -r
+
+FORCE:
