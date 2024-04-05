@@ -3,14 +3,15 @@ BINDIR=~/bin
 .PHONY: all clean install uninstall FORCE
 all: crontab
 
-crontab: $(sort $(wildcard crontab.d/*)) $(sort $(wildcard ~/.crontab.d/*))
+crontab: mail $(sort $(wildcard crontab.d/*)) $(sort $(wildcard ~/.crontab.d/*))
 	cat $+ > $@
 
-crontab.d/mail: FORCE
+mail: FORCE
 	echo MAILFROM=$(USER) > $@
 
 clean:
 	rm -f crontab
+	rm -f mail
 
 install: crontab
 	cp checkcmd.sh $(BINDIR)/
