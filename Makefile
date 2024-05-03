@@ -14,9 +14,9 @@ clean:
 	rm -f mail
 
 install: crontab
-	cp checkcmd.sh $(BINDIR)/
-	cp checkdiff.sh $(BINDIR)/
-	cp filter_lines.sh $(BINDIR)/
+	cp -a checkcmd.sh $(BINDIR)/
+	cp -a checkdiff.sh $(BINDIR)/
+	cp -a filter_lines.sh $(BINDIR)/
 	crontab crontab
 
 uninstall:
