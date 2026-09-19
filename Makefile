@@ -19,11 +19,21 @@ install: crontab $(BINDIR)
 	cp -a filter_lines.sh $(BINDIR)/
 	crontab crontab
 
-uninstall:
-	rm $(BINDIR)/checkcmd.sh
-	rm $(BINDIR)/checkdiff.sh
-	rm $(BINDIR)/filter_lines.sh
-	crontab -r
+uninstall: crontab
+	@tmp="$$(mktemp)"; \
+	trap 'rm -f "$$tmp"' EXIT; \
+	if ! crontab -l > "$$tmp" 2>/dev/null; then \
+		echo "Not uninstalling: current crontab could not be read." >&2; \
+		exit 1; \
+	fi; \
+	if ! cmp -s "$$tmp" crontab; then \
+		echo "Not uninstalling: current crontab differs from repository crontab." >&2; \
+		exit 1; \
+	fi; \
+	crontab -r; \
+	rm -f $(BINDIR)/checkcmd.sh; \
+	rm -f $(BINDIR)/checkdiff.sh; \
+	rm -f $(BINDIR)/filter_lines.sh
 
 $(BINDIR):
 	mkdir -p $@
