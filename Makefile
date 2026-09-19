@@ -1,4 +1,4 @@
-BINDIR=~/bin
+BINDIR := $(HOME)/bin
 
 .PHONY: all clean install uninstall FORCE
 all: crontab
@@ -13,7 +13,7 @@ clean:
 	rm -f crontab
 	rm -f mail
 
-install: crontab
+install: crontab $(BINDIR)
 	cp -a checkcmd.sh $(BINDIR)/
 	cp -a checkdiff.sh $(BINDIR)/
 	cp -a filter_lines.sh $(BINDIR)/
@@ -24,5 +24,8 @@ uninstall:
 	rm $(BINDIR)/checkdiff.sh
 	rm $(BINDIR)/filter_lines.sh
 	crontab -r
+
+$(BINDIR):
+	mkdir -p $@
 
 FORCE:
