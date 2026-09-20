@@ -1,6 +1,6 @@
 BINDIR := $(HOME)/bin
 
-.PHONY: all clean install uninstall FORCE
+.PHONY: all clean install install-config install-bin uninstall uninstall-config uninstall-bin FORCE
 all: crontab
 
 crontab: mail $(sort $(wildcard crontab.d/*)) $(sort $(wildcard ~/.crontab.d/*))
@@ -13,13 +13,23 @@ clean:
 	rm -f crontab
 	rm -f mail
 
-install: crontab $(BINDIR)
+install:
+	$(MAKE) install-bin
+	$(MAKE) install-config
+
+install-config: crontab
+	crontab crontab
+
+install-bin: $(BINDIR)
 	cp -a checkcmd.sh $(BINDIR)/
 	cp -a checkdiff.sh $(BINDIR)/
 	cp -a filter_lines.sh $(BINDIR)/
-	crontab crontab
 
-uninstall: crontab
+uninstall:
+	$(MAKE) uninstall-config
+	$(MAKE) uninstall-bin
+
+uninstall-config: crontab
 	@tmp="$$(mktemp)"; \
 	trap 'rm -f "$$tmp"' EXIT; \
 	if ! crontab -l > "$$tmp" 2>/dev/null; then \
@@ -30,9 +40,11 @@ uninstall: crontab
 		echo "Not uninstalling: current crontab differs from repository crontab." >&2; \
 		exit 1; \
 	fi; \
-	crontab -r; \
-	rm -f $(BINDIR)/checkcmd.sh; \
-	rm -f $(BINDIR)/checkdiff.sh; \
+	crontab -r
+
+uninstall-bin:
+	rm -f $(BINDIR)/checkcmd.sh
+	rm -f $(BINDIR)/checkdiff.sh
 	rm -f $(BINDIR)/filter_lines.sh
 
 $(BINDIR):
